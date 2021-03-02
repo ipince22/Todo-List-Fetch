@@ -77,60 +77,64 @@ export function Home() {
 	return (
 		<div className="container mt-5 text-center">
 			<div className="row d-flex justify-content-center">
-				<div className="col-md-10">
+				<div className="col-md-8">
 					<div className="card">
-						<h1 className="display-5 text-primary">To Do List</h1>
-						<div className="card-header">
-							<div className="row mt-4">
-								<div className="col-sm-6 pb-3">
-									<label>Task</label>
-									<input
-										className="form-control"
-										type="text"
-										value={task}
-										onChange={e => {
-											setTask(
-												e.target.value.toUpperCase()
-											);
-										}}
-									/>
-								</div>
-								<div className="col-sm-1 pb-3">
-									<label>Done</label>
-									<input
-										type="checkbox"
-										className="form-control"
-										checked={check}
-										onChange={e =>
-											setCheck(e.target.checked)
+						<div className="card-body text-primary">
+							<h1 className="display-5">To Do List</h1>
+							<div className="d-flex">
+								<input
+									className="form-control"
+									type="text"
+									value={task}
+									onChange={e => {
+										setTask(e.target.value.toUpperCase());
+									}}
+									onKeyPress={e => {
+										if (e.key === "Enter") {
+											if (task != "") {
+												setList(
+													list.concat(
+														task.toUpperCase()
+													)
+												);
+												setTask("");
+												console.log({ list });
+											} else {
+												alert("Ingrese una actividad");
+											}
 										}
-									/>
-								</div>
-								<div className="col-sm-5 pb-3 d-flex align-items-end">
-									<button
-										type="button"
-										className="form-control btn btn-primary"
-										onClick={() => {
+									}}
+								/>
+								<input
+									type="checkbox"
+									className="form-control"
+									checked={check}
+									onChange={e => setCheck(e.target.checked)}
+								/>
+								<button
+									type="button"
+									className="form-control btn btn-primary"
+									onClick={() => {
+										if (task != "") {
 											let obj = {
-												label: task,
+												label: task.toUpperCase(),
 												done: check
 											};
 											setList(list.concat(obj));
-											setCheck(false);
 											setTask("");
 											console.log({ list });
-										}}>
-										Add List
-									</button>
-								</div>
+										} else {
+											alert("Ingrese una actividad");
+										}
+									}}>
+									Add List
+								</button>
 							</div>
-						</div>
-						<div className="card-body text-primary">
 							{!list
 								? "loading..."
 								: list.map((item, index) => {
 										return (
-											<label
+											<li
 												className="form-control text-primary list-group-item list-group-item-action"
 												key={index}
 												onDoubleClick={() => {
@@ -141,8 +145,8 @@ export function Home() {
 														)
 													);
 												}}>
-												{item.label + " - " + item.done}
-											</label>
+												{item}
+											</li>
 										);
 								  })}
 						</div>
@@ -150,28 +154,13 @@ export function Home() {
 				</div>
 			</div>
 			<div className="row d-flex justify-content-center">
-				<button
-					type="button"
-					className="btn btn-outline-primary"
-					onClick={() => {
-						newTodo();
-					}}>
+				<button type="button" className="btn btn-outline-primary">
 					New
 				</button>
-				<button
-					type="button"
-					className="btn btn-outline-success"
-					onClick={() => {
-						updateTodo(list);
-					}}>
+				<button type="button" className="btn btn-outline-success">
 					Update
 				</button>
-				<button
-					type="button"
-					className="btn btn-outline-danger"
-					onClick={() => {
-						deleteTodo();
-					}}>
+				<button type="button" className="btn btn-outline-danger">
 					Delete
 				</button>
 			</div>
