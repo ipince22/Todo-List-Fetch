@@ -22,10 +22,9 @@ export function Home() {
 			.then(res => res.json())
 			.then(data => {
 				setList(data);
-				console.log({ data });
+				//console.log({ data });
 			}) //cargando la info
-			.catch(error => console.error("Error:", error))
-			.then(response => console.log("Success:", response));
+			.catch(error => console.error("Error:", error.message));
 	};
 	const newTodo = () => {
 		let array = [];
@@ -39,8 +38,7 @@ export function Home() {
 				//console.log("newToDo", data);
 				loadTodo();
 			}) //cargando la
-			.catch(error => console.error("Error:", error))
-			.then(response => console.log("Success:", response));
+			.catch(error => console.error("Error:", error.message));
 	};
 	const updateTodo = lista => {
 		fetch(url, {
@@ -50,11 +48,10 @@ export function Home() {
 		})
 			.then(res => res.json())
 			.then(data => {
-				//console.log("updateTodo", data);
 				loadTodo();
+				alert(data.result);
 			}) //cargando la
-			.catch(error => console.error("Error:", error))
-			.then(response => console.log("Success:", response));
+			.catch(error => console.error("Error:", error.message));
 	};
 	const deleteTodo = () => {
 		fetch(url, {
@@ -65,9 +62,9 @@ export function Home() {
 			.then(data => {
 				//console.log("updateTodo", data);
 				newTodo();
+				alert(data.result);
 			}) //cargando la
-			.catch(error => console.error("Error:", error))
-			.then(response => console.log("Success:", response));
+			.catch(error => console.error("Error:", error.message));
 	};
 
 	useEffect(() => {
@@ -82,7 +79,7 @@ export function Home() {
 						<h1 className="display-5 text-primary">To Do List</h1>
 						<div className="card-header">
 							<div className="row mt-4">
-								<div className="col-sm-6 pb-3">
+								<div className="col-sm-8 pb-3">
 									<label>Task</label>
 									<input
 										className="form-control"
@@ -106,7 +103,7 @@ export function Home() {
 										}
 									/>
 								</div>
-								<div className="col-sm-5 pb-3 d-flex align-items-end">
+								<div className="col-sm-3 pb-3 d-flex align-items-end">
 									<button
 										type="button"
 										className="form-control btn btn-primary"
@@ -118,7 +115,7 @@ export function Home() {
 											setList(list.concat(obj));
 											setCheck(false);
 											setTask("");
-											console.log({ list });
+											//console.log({ list });
 										}}>
 										Add List
 									</button>
@@ -131,17 +128,22 @@ export function Home() {
 								: list.map((item, index) => {
 										return (
 											<label
-												className="form-control text-primary list-group-item list-group-item-action"
+												className="form-control text-left px-5"
 												key={index}
-												onDoubleClick={() => {
-													setList(
-														list.filter(
-															(itemf, indexf) =>
-																indexf !== index
-														)
-													);
-												}}>
-												{item.label + " - " + item.done}
+												// onDoubleClick={() => {
+												// 	setList(
+												// 		list.filter(
+												// 			(itemf, indexf) =>
+												// 				indexf !== index
+												// 		)
+												// 	);
+												// }}
+											>
+												<input
+													type="checkbox"
+													checked={item.done}
+												/>
+												{item.label}
 											</label>
 										);
 								  })}
@@ -150,14 +152,6 @@ export function Home() {
 				</div>
 			</div>
 			<div className="row d-flex justify-content-center">
-				<button
-					type="button"
-					className="btn btn-outline-primary"
-					onClick={() => {
-						newTodo();
-					}}>
-					New
-				</button>
 				<button
 					type="button"
 					className="btn btn-outline-success"
